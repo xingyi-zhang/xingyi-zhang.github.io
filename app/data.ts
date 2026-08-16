@@ -1,0 +1,48 @@
+export type Project = {
+  id: string;
+  slug: string;
+  title: string;
+  year: string;
+  section: "work" | "creative";
+  categories: string[];
+  tags: string[];
+  shortDescription?: string;
+  links: { label: string; url: string }[];
+  featured: boolean;
+  palette: [string, string, string];
+  shape: "landscape" | "portrait" | "square";
+};
+
+type ProjectInput = Omit<Project, "section" | "palette" | "shape"> & { shape?: Project["shape"] };
+const work = (project: ProjectInput): Project => ({ ...project, section: "work", palette: ["#e4e0d6", "#57534b", "#f4f1e9"], shape: project.shape ?? "landscape" });
+const creative = (project: ProjectInput): Project => ({ ...project, section: "creative", palette: ["#e7e2d8", "#69645b", "#f4f1e9"], shape: project.shape ?? "square" });
+
+export const projects: Project[] = [
+  work({ id: "irw", slug: "item-response-warehouse", title: "Item Response Warehouse", year: "2025—Present", categories: ["Open Science", "Psychometrics"], tags: ["Open Science", "Psychology", "Data", "Publication"], shortDescription: "A harmonized repository that makes large-scale item-response datasets easier to find, understand, and reuse.", links: [{ label: "Website", url: "https://itemresponsewarehouse.org/" }, { label: "Paper", url: "https://www.researchgate.net/publication/404056496_The_Item_Response_Warehouse_What_It_Is_How_to_Use_It_and_Targets_for_Potential_Improvements/" }], featured: true }),
+  work({ id: "lovesims", slug: "lovesims", title: "LoveSims", year: "2024—2025", categories: ["LLM Agents", "Psychology"], tags: ["Research", "Perception", "NLP", "Psychology", "Simulation", "Publication"], shortDescription: "An agent-based simulation using psychological and game-theoretic ideas to model partner selection and romantic relationship dynamics.", links: [{ label: "CHI 2025 Paper", url: "https://dl.acm.org/doi/full/10.1145/3706599.3720011" }], featured: true, shape: "portrait" }),
+  work({ id: "preregistration", slug: "preregistration-and-registered-reports", title: "Preregistration & Registered Reports", year: "2023—2024", categories: ["Meta-research", "Psychology"], tags: ["Open Science", "Psychology", "Research", "Conference"], shortDescription: "An independent meta-analysis comparing rates of statistically significant findings across traditional articles, preregistered articles, and Registered Reports.", links: [], featured: false }),
+  work({ id: "word-clouds", slug: "semantic-priming-in-word-clouds", title: "Semantic Priming in Word Clouds", year: "2022—2024", categories: ["Perception", "Visualization"], tags: ["Research", "Perception", "Psychology", "Computer Science", "Visualization", "Publication"], shortDescription: "Experiments on peripheral vision, multiple primes, and the perceptual limits of reading meaning from word clouds.", links: [{ label: "VIS Paper", url: "https://ieeexplore.ieee.org/abstract/document/11298720" }], featured: false, shape: "square" }),
+  work({ id: "dna", slug: "dna-self-assembly", title: "DNA Self-Assembly as Graphs", year: "2023", categories: ["Mathematics", "Modeling"], tags: ["Graph Theory", "Mathematics", "Research", "Conference", "Publication"], shortDescription: "Graph-theoretic models and vertex-cover methods for finding tile-number bounds in the flexible-tile model of DNA self-assembly.", links: [{ label: "Preprint", url: "https://arxiv.org/abs/2502.03716" }], featured: true }),
+  work({ id: "hamiltonian", slug: "hamiltonian-paths", title: "Graphs with Many Hamiltonian Paths", year: "2021—2024", categories: ["Graph Theory", "Research"], tags: ["Graph Theory", "Mathematics", "Research", "Publication", "Conference"], shortDescription: "Constructing sparse graph families with many Hamiltonian paths, and studying how vertex pairs can remain richly connected without a Hamiltonian cycle.", links: [{ label: "Preprint", url: "https://arxiv.org/abs/2106.13372" }, { label: "Journal", url: "https://msp.org/involve/about/journal/about.html" }], featured: true }),
+  work({ id: "flies", slug: "reward-and-social-behavior", title: "Reward & Social Behavior in Fruit Flies", year: "2022—2024", categories: ["Neuroscience", "Behavior"], tags: ["Neuroscience", "Psychology", "Research", "Conference"], shortDescription: "Optogenetic and behavioral experiments tracing how P1 and pCd neural circuits shape reward and the persistence of mating behavior in Drosophila.", links: [], featured: false }),
+  work({ id: "listening", slug: "audiovisual-listening-effort", title: "Seeing Speech, Hearing Through Noise", year: "2021—2023", categories: ["Perception", "Psychology"], tags: ["Perception", "Psychology", "Research", "Publication"], shortDescription: "Research on how temporal cues, point-light displays, and faces affect speech identification and listening effort under noise.", links: [{ label: "PLOS ONE", url: "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0290826" }], featured: false }),
+  work({ id: "memory", slug: "visual-working-memory", title: "How Visual Working Memory Develops", year: "2021—2022", categories: ["Development", "Cognition"], tags: ["Perception", "Psychology", "Research", "Publication"], shortDescription: "Studying when preschoolers begin to integrate visual information in working memory—and what changes after age four.", links: [{ label: "Child Development", url: "https://srcd.onlinelibrary.wiley.com/doi/10.1111/cdev.13820" }], featured: false }),
+  creative({ id: "hexster", slug: "hexster", title: "Hexster", year: "2026", categories: ["Tabletop Game", "Team Bilby"], tags: ["Design", "Games", "Tabletop"], shortDescription: "A cooperative route-building game about hamsters tunneling toward their partners through silent coordination, spatial reasoning, and a little mind-reading.", links: [{ label: "Project Page", url: "https://mechanicsofmagic.com/2026/07/10/p1-hexster-team-bilby/" }], featured: true, shape: "landscape" }),
+  creative({ id: "sixth-face", slug: "the-sixth-face", title: "The Sixth Face", year: "2026", categories: ["Game Design", "Team Bathyergus"], tags: ["Design", "Games", "Digital"], shortDescription: "An experimental game project created with Team Bathyergus.", links: [{ label: "Project Page", url: "https://mechanicsofmagic.com/2026/08/14/p2-the-sixth-face-vincent-van-gogh-team-bathyergus/" }], featured: true }),
+  creative({ id: "stickers", slug: "stickers", title: "Stickers", year: "Ongoing", categories: ["Visual Design", "Series"], tags: ["Design", "Stickers"], shortDescription: "Small visual ideas made to travel, attach, and become part of other objects.", links: [], featured: false }),
+  creative({ id: "funnel-cake", slug: "funnel-cake-is-not-real-cake", title: "Funnel Cake Is Not Real Cake", year: "Notes", categories: ["Random Thoughts", "Writing"], tags: ["Writing", "Random Thoughts"], shortDescription: "A short investigation into names, categories, and suspicious desserts.", links: [], featured: false }),
+  creative({ id: "taco-transport", slug: "taco-burrito-nacho", title: "Tacos, Burritos & Nachos", year: "Notes", categories: ["Random Thoughts", "Writing"], tags: ["Writing", "Random Thoughts"], shortDescription: "They may differ primarily in their transportation medium.", links: [], featured: false }),
+
+  creative({ id: "dragon", slug: "dragon", title: "Dragon", year: "Ongoing", categories: ["Creature", "Object"], tags: ["Yarn", "Crochet", "Creatures"], shortDescription: "A small creature from an expanding handmade menagerie.", links: [], featured: false, shape: "portrait" }),
+  creative({ id: "jellyfish", slug: "jellyfish", title: "Jellyfish", year: "Ongoing", categories: ["Creature", "Object"], tags: ["Yarn", "Crochet", "Creatures"], links: [], featured: false }),
+  creative({ id: "axolotl", slug: "axolotl", title: "Axolotl", year: "Ongoing", categories: ["Creature", "Object"], tags: ["Yarn", "Crochet", "Creatures"], links: [], featured: true }),
+  creative({ id: "frog", slug: "frog", title: "Frog", year: "Ongoing", categories: ["Creature", "Object"], tags: ["Yarn", "Crochet", "Creatures"], links: [], featured: false }),
+  creative({ id: "triceratops", slug: "triceratops", title: "Triceratops", year: "Ongoing", categories: ["Creature", "Object"], tags: ["Yarn", "Crochet", "Creatures"], links: [], featured: false }),
+  creative({ id: "sweets", slug: "sweets", title: "Sweets", year: "Ongoing", categories: ["Cupcake · Donuts · Cake · Ice Cream", "Series"], tags: ["Yarn", "Crochet", "Food"], shortDescription: "A soft collection of desserts: cupcake, donuts, cake, and ice cream.", links: [], featured: true }),
+  creative({ id: "woven-rainbow", slug: "woven-rainbow", title: "Woven Rainbow", year: "Ongoing", categories: ["Weaving", "Textile"], tags: ["Yarn", "Fiber", "Weaving", "Rainbow"], links: [], featured: true, shape: "landscape" }),
+  creative({ id: "crochet-rainbow", slug: "crochet-rainbow", title: "Crochet Rainbow", year: "Ongoing", categories: ["Crochet", "Object"], tags: ["Yarn", "Crochet", "Rainbow"], links: [], featured: false }),
+  creative({ id: "yarn-sculpture", slug: "yarn-sculpture", title: "Yarn Sculpture", year: "Course Project", categories: ["Sculpture", "Fiber"], tags: ["Yarn", "Fiber", "Sculpture"], shortDescription: "A sculpture class final project made with yarn.", links: [], featured: false }),
+  creative({ id: "drawings", slug: "drawings", title: "Drawings", year: "Ongoing", categories: ["Drawing", "Studies"], tags: ["Drawing", "Paper"], shortDescription: "Lines, observations, visual notes, and studies collected over time.", links: [], featured: false }),
+];
+
+export const allTags = (section: Project["section"]) => ["All", ...Array.from(new Set(projects.filter((p) => p.section === section).flatMap((p) => p.tags)))];
