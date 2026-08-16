@@ -1,3 +1,4 @@
-import { resourceCollections } from "./data";
+import { Collection } from "../components";
+import { resourceFilters, resourceItems } from "../data";
 
-export default function Resources() { return <main><div className="page-heading"><p className="eyebrow">Library</p><h1>Resources</h1><p>Reading lists, guides, and things I wanted to make easier to find.</p></div><div className="resource-cards">{resourceCollections.map((item) => <a className="resource-card" href={`/resources/${item.slug}`} key={item.number}><div className="resource-top"><span>{item.number}</span><span>{item.language}</span></div><div><p className="eyebrow">{item.kind}</p><h2>{item.title}</h2><p className="resource-description">{item.description}</p></div><p className="resource-status">{item.status}</p></a>)}</div></main>; }
+export default function Resources() { return <Collection title="Resources" eyebrow="Library" subtitle="Reading lists, guides, and things I wanted to make easier to find." items={resourceItems} filters={resourceFilters.topics} initialFilter="Trauma" filterLabel="Topics" secondaryOptions={resourceFilters.outputs} secondaryFilterLabel="Outputs" primaryField="topics" secondaryField="outputs" />; }
