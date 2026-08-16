@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Optional AI crawler rules. Uncomment to request exclusion.
+# User-agent: GPTBot
+# Disallow: /
+# User-agent: Google-Extended
+# Disallow: /
+# User-agent: ClaudeBot
+# Disallow: /
+# User-agent: CCBot
+# Disallow: /
+
+# robots.txt expresses preferences; it cannot guarantee protection from scraping.
