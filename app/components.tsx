@@ -10,7 +10,7 @@ export function SiteHeader() {
 
 export function Artwork({ project, large = false }: { project: Project; large?: boolean }) {
   const style = { "--c1": project.palette[0], "--c2": project.palette[1], "--c3": project.palette[2] } as React.CSSProperties;
-  return <div className={`artwork empty ${project.shape} ${large ? "large" : ""}`} style={style} role="img" aria-label={`Image placeholder for ${project.title}`} />;
+  return <div className={`artwork ${project.image ? "has-image" : "empty"} ${project.shape} ${large ? "large" : ""}`} style={style} role={project.image ? undefined : "img"} aria-label={project.image ? undefined : `Image placeholder for ${project.title}`}>{project.image && <img src={project.image} alt={project.title} />}</div>;
 }
 
 export function ProjectCard({ project }: { project: Project }) {
@@ -25,7 +25,8 @@ export function ProjectCard({ project }: { project: Project }) {
     observer.observe(element);
     return () => observer.disconnect();
   }, []);
-  const content = <><Artwork project={project} /><div className="card-meta"><h2>{project.title}</h2><p>{project.categories.join(" · ")} <em>{project.year}</em></p></div></>;
+  const textOnly = project.tags.includes("Writing");
+  const content = <>{!textOnly && <Artwork project={project} />}<div className={`card-meta ${textOnly ? "text-only" : ""}`}><h2>{project.title}</h2>{textOnly && project.shortDescription && <p className="card-description">{project.shortDescription}</p>}<p>{project.categories.join(" · ")} <em>{project.year}</em></p></div></>;
   const destination = project.links[0]?.url;
   const card = destination
     ? <a className="project-card is-linked" href={destination} target="_blank" rel="noreferrer" aria-label={`${project.title} — open project`}>{content}</a>
@@ -47,5 +48,6 @@ export function Collection({ title, subtitle, items, tags, initialTag = "All", f
 export function ProjectDetail({ project }: { project: Project }) {
   const [lightbox, setLightbox] = useState(false);
   useEffect(() => { const close = (e: KeyboardEvent) => e.key === "Escape" && setLightbox(false); window.addEventListener("keydown", close); return () => window.removeEventListener("keydown", close); }, []);
-  return <main className="detail"><button className="hero-button" onClick={() => setLightbox(true)} aria-label={`Enlarge ${project.title} image`}><Artwork project={project} large /></button><div className="detail-copy"><div><p className="eyebrow">{project.section}</p><h1>{project.title}</h1></div><div><p>{project.categories.join(" · ")} · {project.year}</p>{project.shortDescription && <p className="description">{project.shortDescription}</p>}<div className="links">{project.links.map((link) => <a href={link.url} key={link.label}>{link.label} ↗</a>)}</div></div></div><section className="gallery"><p className="eyebrow">Gallery</p><button onClick={() => setLightbox(true)}><Artwork project={project} /></button><button onClick={() => setLightbox(true)}><Artwork project={{...project, palette: [project.palette[2], project.palette[0], project.palette[1]]}} /></button></section>{lightbox && <div className="lightbox" role="dialog" aria-modal="true" aria-label={`${project.title} image viewer`} onClick={() => setLightbox(false)}><button className="close" onClick={() => setLightbox(false)}>Close ×</button><div onClick={(e) => e.stopPropagation()}><Artwork project={project} large /></div><button className="prev" aria-label="Previous image">←</button><button className="next" aria-label="Next image">→</button></div>}</main>;
+  const gallery = project.gallery ?? [];
+  return <main className="detail"><button className="hero-button" onClick={() => setLightbox(true)} aria-label={`Enlarge ${project.title} image`}><Artwork project={project} large /></button><div className="detail-copy"><div><p className="eyebrow">{project.section}</p><h1>{project.title}</h1></div><div><p>{project.categories.join(" · ")} · {project.year}</p>{project.shortDescription && <p className="description">{project.shortDescription}</p>}<div className="links">{project.links.map((link) => <a href={link.url} key={link.label}>{link.label} ↗</a>)}</div></div></div>{gallery.length > 0 && <section className="gallery"><p className="eyebrow">Gallery</p>{gallery.map((image) => <div className="gallery-image" key={image}><img src={image} alt={`${project.title} study`} /></div>)}</section>}{lightbox && <div className="lightbox" role="dialog" aria-modal="true" aria-label={`${project.title} image viewer`} onClick={() => setLightbox(false)}><button className="close" onClick={() => setLightbox(false)}>Close ×</button><div onClick={(e) => e.stopPropagation()}><Artwork project={project} large /></div></div>}</main>;
 }
