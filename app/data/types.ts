@@ -10,7 +10,6 @@ export type BaseItem = {
   gallery?: string[];
   links?: Link[];
   featured?: boolean;
-  shape?: "landscape" | "portrait" | "square";
 };
 
 export type ResearchItem = BaseItem & {

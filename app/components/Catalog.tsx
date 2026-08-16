@@ -4,8 +4,7 @@ import { useLayoutEffect, useRef, useState } from "react";
 import type { CatalogItem } from "../data";
 
 function Artwork({ item, large = false }: { item: CatalogItem; large?: boolean }) {
-  const shape = item.shape ?? (item.section === "creative" ? "square" : "landscape");
-  return <div className={`artwork has-image ${shape} ${large ? "large" : ""}`}><img src={item.image} alt={item.title} /></div>;
+  return <div className={`artwork has-image ${large ? "large" : ""}`}><img src={item.image} alt={item.title} /></div>;
 }
 
 function internalUrl(item: CatalogItem) {
