@@ -9,6 +9,7 @@ export type BaseItem = {
   image?: string;
   gallery?: string[];
   links?: Link[];
+  details?: boolean;
   featured?: boolean;
 };
 

@@ -25,11 +25,12 @@ export function CatalogCard({ item }: { item: CatalogItem }) {
   }, []);
 
   const textOnly = !item.image;
-  const destination = item.links?.[0]?.url ?? internalUrl(item);
+  const destination = item.links?.[0]?.url ?? (item.details || item.gallery?.length ? internalUrl(item) : undefined);
   const external = Boolean(item.links?.[0]?.url);
   const content = <>{item.image && <Artwork item={item} />}<div className={`card-meta ${textOnly ? "text-only" : ""}`}><h2>{item.title}</h2>{textOnly && item.description && <p className="card-description">{item.description}</p>}<p>{item.labels.join(" · ")} <em>{item.date}</em></p></div></>;
 
-  return <div className="project-card-cell" ref={cell} style={{ gridRowEnd: `span ${rowSpan}` }}><a className="project-card is-linked" href={destination} target={external ? "_blank" : undefined} rel={external ? "noreferrer" : undefined} aria-label={`${item.title} — open project`}>{content}</a></div>;
+  const card = destination ? <a className="project-card is-linked" href={destination} target={external ? "_blank" : undefined} rel={external ? "noreferrer" : undefined} aria-label={`${item.title} — open project`}>{content}</a> : <article className="project-card is-static">{content}</article>;
+  return <div className="project-card-cell" ref={cell} style={{ gridRowEnd: `span ${rowSpan}` }}>{card}</div>;
 }
 
 export function CatalogGrid({ items }: { items: CatalogItem[] }) {
