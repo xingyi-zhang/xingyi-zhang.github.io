@@ -23,6 +23,29 @@ export type CreativeItem = BaseItem & {
   section: "creative";
   practice: string;
   materials: string[];
+  writingSections?: {
+    title: string;
+    entries: { label?: string; text: string }[];
+  }[];
+};
+
+export type ResourceEntry = {
+  title: string;
+  creator?: string;
+  year?: string;
+  note?: string;
+  stars?: 1 | 2 | 3;
+  workbook?: boolean;
+};
+
+export type ResourceGroup = {
+  title: string;
+  entries: ResourceEntry[];
+};
+
+export type GuideSection = {
+  title: string;
+  paragraphs: string[];
 };
 
 export type ResourceItem = BaseItem & {
@@ -31,6 +54,10 @@ export type ResourceItem = BaseItem & {
   outputs: string[];
   language?: string;
   introduction?: string;
+  introParagraphs?: string[];
+  contentNote?: string;
+  groups?: ResourceGroup[];
+  guideSections?: GuideSection[];
   items?: string[];
 };
 
