@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { CatalogItem } from "../data";
 
 function Artwork({ item, large = false }: { item: CatalogItem; large?: boolean }) {
@@ -55,6 +55,10 @@ type CollectionProps = {
 export function Collection({ title, subtitle, eyebrow, items, filters, initialFilter, filterLabel, secondaryOptions, secondaryFilterLabel, primaryField, secondaryField }: CollectionProps) {
   const [active, setActive] = useState(initialFilter);
   const [secondary, setSecondary] = useState<string[]>([]);
+  useEffect(() => {
+    const requested = new URLSearchParams(window.location.search).get("filter");
+    if (requested && filters.includes(requested)) setActive(requested);
+  }, [filters]);
   const toggleSecondary = (option: string) => setSecondary((current) => current.includes(option) ? current.filter((item) => item !== option) : [...current, option]);
   const valuesFor = (item: CatalogItem, field: CollectionProps["primaryField"] | CollectionProps["secondaryField"]): string[] => {
     if (field === "practice") return "practice" in item ? [item.practice] : [];
