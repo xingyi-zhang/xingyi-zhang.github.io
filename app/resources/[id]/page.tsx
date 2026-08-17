@@ -32,13 +32,13 @@ export default async function ResourcePage({ params }: { params: Promise<{ id: s
 
     {item.groups?.map((group) => <section className="resource-group" key={group.title}>
       <h2>{group.title}</h2>
-      <div>{group.entries.map((entry) => <article className={`resource-entry ${entry.workbook ? "is-workbook" : ""}`} key={`${entry.title}-${entry.creator ?? ""}`}>
+      <ul>{group.entries.map((entry) => <li className={`resource-entry ${entry.workbook ? "is-workbook" : ""}`} key={`${entry.title}-${entry.creator ?? ""}`}>
         <div>
           <h3>{entry.title}{entry.stars && <span className="entry-stars" aria-label={`${entry.stars} personal favorite star${entry.stars > 1 ? "s" : ""}`}>{"★".repeat(entry.stars)}</span>}</h3>
           {(entry.creator || entry.year || entry.workbook) && <p className="entry-byline">{entry.creator}{entry.creator && entry.year && " · "}{entry.year}{entry.workbook && <span className="workbook-mark">Workbook</span>}</p>}
         </div>
         {entry.note && <p>{entry.note}</p>}
-      </article>)}</div>
+      </li>)}</ul>
     </section>)}
 
     {item.items && item.items.length > 0 && <div className="resource-index">

@@ -32,10 +32,10 @@ export function ItemDetail({ item }: { item: CatalogItem }) {
     {writingSections && <article className="writing-piece">
       {writingSections.map((section) => <section className="writing-section" key={section.title}>
         <h2>{section.title}</h2>
-        <div>{section.entries.map((entry) => <div className={`writing-entry ${entry.label ? "" : "without-label"}`} key={`${entry.label ?? ""}-${entry.text}`}>
-          {entry.label && <h3>{entry.label}</h3>}
-          <p>{entry.text}</p>
-        </div>)}</div>
+        <div className="writing-paragraphs">{section.entries.map((entry) => <p className="writing-entry" key={`${entry.label ?? ""}-${entry.text}`}>
+          {entry.label && <strong>{entry.label}</strong>}
+          {entry.label && ": "}{entry.text}
+        </p>)}</div>
       </section>)}
     </article>}
 

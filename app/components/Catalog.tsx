@@ -26,9 +26,11 @@ export function CatalogCard({ item }: { item: CatalogItem }) {
   }, []);
 
   const textOnly = !item.image;
-  const destination = item.links?.[0]?.url ?? (item.details || item.gallery?.length ? internalUrl(item) : undefined);
-  const external = Boolean(item.links?.[0]?.url);
-  const content = <>{item.image && <Artwork item={item} />}<div className={`card-meta ${textOnly ? "text-only" : ""}`}><h2>{item.title}</h2>{textOnly && item.description && <p className="card-description">{item.description}</p>}<p>{item.labels.join(" · ")} <em>{item.date}</em></p></div></>;
+  const hasInternalPage = Boolean(item.details || item.gallery?.length);
+  const destination = hasInternalPage ? internalUrl(item) : item.links?.[0]?.url;
+  const external = Boolean(destination && !hasInternalPage);
+  const showDescription = textOnly || item.section === "research";
+  const content = <>{item.image && <Artwork item={item} />}<div className={`card-meta ${textOnly ? "text-only" : ""}`}><h2>{item.title}</h2>{showDescription && item.description && <p className="card-description">{item.description}</p>}<p>{item.labels.join(" · ")} <em>{item.date}</em></p></div></>;
 
   const cardKind = textOnly ? "text-card" : "image-card";
   const card = destination ? <a className={`project-card is-linked ${cardKind}`} href={destination} target={external ? "_blank" : undefined} rel={external ? "noreferrer" : undefined} aria-label={`${item.title} — open project`}>{content}</a> : <article className={`project-card is-static ${cardKind}`}>{content}</article>;

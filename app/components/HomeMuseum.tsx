@@ -4,7 +4,7 @@ import type { CSSProperties } from "react";
 import { useEffect, useRef, useState } from "react";
 
 const exhibits = [
-  { name: "Graph blackboard", href: "/research?filter=Graph%20Theory", x: 16, y: 56, image: "/images/home/research-graph.png", className: "exhibit-graph" },
+  { name: "Graph blackboard", href: "/research?filter=Graphs%20%26%20Groups", x: 16, y: 56, image: "/images/home/research-graph.png", className: "exhibit-graph" },
   { name: "Perception models", href: "/research?filter=Perception", x: 24, y: 58, image: "/images/home/research-perception.png", className: "exhibit-perception" },
   { name: "Open science archive", href: "/research?filter=Open%20Science", x: 17, y: 71, image: "/images/home/research-open-book.png", className: "exhibit-open-science" },
   { name: "Ceramics table", href: "/creative?filter=Ceramics", x: 48, y: 16, image: "/images/home/creative-ceramics.png", className: "exhibit-ceramics" },
