@@ -67,11 +67,11 @@ main { min-height:calc(100vh - 84px); padding:0 3.2vw 120px; }
 .multi-menu button { width:100%; margin-top:6px; padding:9px 6px; text-align:left; border:0; border-top:1px solid var(--line); background:none; color:var(--muted); cursor:pointer; }
 .multi-menu button:disabled { opacity:.4; cursor:default; }
 .collection-page { position:relative; overflow:hidden; }
-.peek-goose { position:fixed; z-index:18; left:-92px; top:42%; width:180px; pointer-events:none; animation:peek-visit 1.7s ease-in-out both; }
+.peek-goose { position:fixed; z-index:18; left:-92px; top:42%; width:180px; cursor:pointer; animation:peek-visit 1.7s ease-in-out both; }
 .peek-goose.is-persistent { position:absolute; top:auto; left:-86px; bottom:0; animation:peek-arrive .55s ease-out both; }
 .peek-goose svg { display:block; width:100%; }
 .peek-body { fill:#faf8f2; }
-.peek-beak,.peek-feet { fill:#b85f3d; }
+.peek-beak,.peek-beak-lower,.peek-feet { fill:#b85f3d; }
 .peek-eye { fill:#292825; }
 .peek-wing { fill:none; stroke:#d9d8d2; stroke-width:6; stroke-linecap:round; }
 .peek-legs { fill:none; stroke:#b85f3d; stroke-width:7; stroke-linecap:round; }
@@ -195,16 +195,24 @@ main { min-height:calc(100vh - 84px); padding:0 3.2vw 120px; }
 .museum-pond { left:50%; top:55%; width:43%; height:55%; }
 .door-threshold { position:absolute; z-index:4; width:7%; height:13%; padding:0; transform:translate(-50%,-50%); border:0; background:transparent; cursor:pointer; }
 .door-threshold:focus-visible { outline:1px dashed #294f75; }
-.walking-goose { position:absolute; z-index:8; width:clamp(78px,7.5vw,114px); transform:translate(-50%,-82%); transition:left var(--travel-time) cubic-bezier(.42,.05,.2,1),top var(--travel-time) cubic-bezier(.42,.05,.2,1); pointer-events:none; filter:drop-shadow(0 6px 5px rgba(23,23,20,.12)); }
+.walking-goose { position:absolute; z-index:8; width:clamp(78px,7.5vw,114px); transform:translate(-50%,-82%); transition:left var(--travel-time) cubic-bezier(.42,.05,.2,1),top var(--travel-time) cubic-bezier(.42,.05,.2,1); cursor:pointer; filter:drop-shadow(0 6px 5px rgba(23,23,20,.12)); }
 .walking-goose svg { display:block; width:100%; overflow:visible; }
 .goose-observe { display:none!important; transform:scale(1.08) translateX(4px); transform-origin:50% 80%; }
 .walking-goose.is-observing .goose-idle { display:none; }
 .walking-goose.is-observing .goose-observe { display:block!important; animation:observe-lean .35s ease-out both; }
 .goose-beak,.goose-leg path { fill:#b85f3d; stroke:#b85f3d; stroke-width:4; stroke-linejoin:round; }
+.goose-beak-lower { fill:#b85f3d; opacity:0; }
 .goose-body { fill:#faf8f2; }
 .goose-eye { fill:#292825; }
 .goose-wing { fill:none; stroke:#d9d8d2; stroke-width:6; stroke-linecap:round; }
 .goose-leg>path:first-child { fill:none; stroke-width:7; stroke-linecap:round; }
+.peek-beak-closed,.peek-beak-lower,.goose-beak-closed,.goose-beak-lower { transform-box:fill-box; transform-origin:left center; transition:transform .12s ease,opacity .08s ease; }
+.peek-beak-lower { opacity:0; }
+.is-honking .peek-beak-closed,.walking-goose.is-honking .goose-beak-closed { transform:rotate(-7deg) translateY(-2px); }
+.is-honking .peek-beak-lower,.walking-goose.is-honking .goose-beak-lower { opacity:1; transform:rotate(9deg) translateY(2px); }
+.honk-word { position:absolute; left:82%; top:4%; color:#a95338; font:italic 400 17px/1 var(--serif); letter-spacing:.09em; opacity:0; pointer-events:none; white-space:nowrap; text-shadow:0 1px 0 rgba(255,255,255,.45); }
+.peek-goose .honk-word { left:83%; top:12%; }
+.is-honking>.honk-word { animation:honk-pop .85s ease-out both; }
 .walking-goose.is-walking .goose-idle { animation:goose-waddle .38s ease-in-out infinite alternate; transform-origin:50% 85%; }
 .walking-goose.is-walking .leg-one { animation:goose-step-a .38s ease-in-out infinite alternate; transform-origin:113px 207px; }
 .walking-goose.is-walking .leg-two { animation:goose-step-b .38s ease-in-out infinite alternate; transform-origin:154px 208px; }
@@ -218,6 +226,7 @@ main { min-height:calc(100vh - 84px); padding:0 3.2vw 120px; }
 @keyframes goose-step-a { from { transform:rotate(18deg); } to { transform:rotate(-20deg); } }
 @keyframes goose-step-b { from { transform:rotate(-20deg); } to { transform:rotate(18deg); } }
 @keyframes observe-lean { from { transform:scale(1.02) translateX(-3px); } to { transform:scale(1.08) translateX(4px); } }
+@keyframes honk-pop { 0% { opacity:0; transform:translate(-5px,6px) rotate(-5deg) scale(.82); } 18%,65% { opacity:.92; transform:translate(0,0) rotate(-5deg) scale(1); } 100% { opacity:0; transform:translate(12px,-7px) rotate(-5deg) scale(.96); } }
 @media(max-width:1100px){.project-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:640px){.project-grid{grid-template-columns:1fr}.collection-heading>p:last-child{white-space:normal}}
 @media(max-width:800px){.site-header{height:70px}.menu{display:block}nav{display:none;position:absolute;top:70px;left:0;right:0;background:var(--paper);padding:25px 3.2vw;border-bottom:1px solid var(--line);flex-direction:column}nav.open{display:flex}.intro{padding:8vh 0 6vh}.intro h1,.intro>p:not(.eyebrow){white-space:normal}.catalog-controls{align-items:stretch;flex-direction:column;padding-bottom:55px}.multi-select{flex-basis:auto;width:100%}.detail-copy{grid-template-columns:1fr}.gallery{grid-template-columns:1fr}.more{justify-content:flex-start;flex-wrap:wrap}.resource-group,.guide-section,.writing-section{grid-template-columns:1fr;gap:35px}.resource-entry{grid-template-columns:1fr;gap:14px}.writing-entry{grid-template-columns:1fr;gap:10px}.about-introduction{grid-template-columns:1fr;gap:45px;padding:70px 0 90px}.about-gallery{padding-top:85px}.about-gallery-card{flex-basis:82vw;grid-template-rows:minmax(230px,55vh) auto}.home-page{height:calc(100svh - 70px)}.floor-architecture{inset:3% 2% 6%;width:96%;height:91%}.museum-pond{left:50%;top:55%;width:45%;height:42%}.walking-goose{width:70px}.observation-status{top:14px}.observation-status strong{font-size:17px}.map-controls{bottom:10px}.map-controls>span{display:none}.map-controls button{margin-left:auto}}

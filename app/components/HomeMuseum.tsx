@@ -32,9 +32,11 @@ export function HomeMuseum() {
   const motionTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const observeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const navigationTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const honkTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [position, setPosition] = useState({ x: 50, y: 88 });
   const [walking, setWalking] = useState(false);
   const [observing, setObserving] = useState(false);
+  const [honking, setHonking] = useState(false);
   const [travelTime, setTravelTime] = useState("2.4s");
   const nearby = nearbyPoint(position.x, position.y);
 
@@ -62,6 +64,17 @@ export function HomeMuseum() {
     if (destination) navigationTimer.current = setTimeout(() => { window.location.href = destination.href; }, 1100);
   };
 
+  const honk = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+    setWalking(false);
+    setObserving(false);
+    setHonking(false);
+    if (navigationTimer.current) clearTimeout(navigationTimer.current);
+    if (honkTimer.current) clearTimeout(honkTimer.current);
+    requestAnimationFrame(() => setHonking(true));
+    honkTimer.current = setTimeout(() => setHonking(false), 850);
+  };
+
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.code === "Space") {
@@ -86,6 +99,7 @@ export function HomeMuseum() {
     if (motionTimer.current) clearTimeout(motionTimer.current);
     if (observeTimer.current) clearTimeout(observeTimer.current);
     if (navigationTimer.current) clearTimeout(navigationTimer.current);
+    if (honkTimer.current) clearTimeout(honkTimer.current);
   }, []);
 
   const onPlanClick = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -129,9 +143,10 @@ export function HomeMuseum() {
       <button className="museum-pond" type="button" onClick={() => moveTo(50, 55)} aria-label="Walk to the pond"><img src="/images/home/pond.png" alt="" /></button>
       {entrances.slice(0, 3).map((entrance) => <button className="door-threshold" style={{ left: `${entrance.x}%`, top: `${entrance.y}%` }} type="button" onClick={() => moveTo(entrance.x, entrance.y)} aria-label={`Walk to ${entrance.name}`} key={entrance.href}/>) }
 
-      <div className={`walking-goose${walking ? " is-walking" : ""}${observing ? " is-observing" : ""}`} style={gooseStyle} aria-hidden="true">
+      <div className={`walking-goose${walking ? " is-walking" : ""}${observing ? " is-observing" : ""}${honking ? " is-honking" : ""}`} style={gooseStyle} onClick={honk} aria-hidden="true">
         <svg className="goose-idle" viewBox="0 0 256 256">
-          <path className="goose-beak" d="M203 52c11 2 21 5 30 10 5 3 5 9 0 12-10 3-21 4-32 2l2-24Z"/>
+          <path className="goose-beak goose-beak-closed" d="M203 52c11 2 21 5 30 10 5 3 5 9 0 12-10 3-21 4-32 2l2-24Z"/>
+          <path className="goose-beak-lower" d="M202 69c11 2 22 1 32-2-5 8-17 12-33 9l1-7Z"/>
           <path className="goose-body" d="M40 166c23-5 36-20 58-29 14-6 27-6 39-4 11 1 17-5 17-16 0-12-6-25-5-39 1-22 9-37 23-42 14-5 27 3 32 18l-3 22c-12 6-18 13-19 24-1 12 6 27 13 41 8 17 9 33 0 49-12 21-36 32-67 32-33 0-63-12-80-32-5-6-9-12-12-18-2-3 0-5 4-6Z"/>
           <circle className="goose-eye" cx="186" cy="51" r="3"/>
           <path className="goose-wing" d="M76 176c22 2 42-8 57-23"/>
@@ -146,6 +161,7 @@ export function HomeMuseum() {
           <g className="goose-leg"><path d="M92 187v27"/><path d="M92 210c-8 1-15 5-21 10-2 2-1 5 2 5h27c3 0 4-3 2-5l-10-10Z"/></g>
           <g className="goose-leg"><path d="M134 187v27"/><path d="M134 210c-7 1-14 5-20 10-2 2-1 5 2 5h27c3 0 4-3 2-5l-9-10Z"/></g>
         </svg>
+        <span className="honk-word">HONK</span>
       </div>
 
       <div className="map-controls">
