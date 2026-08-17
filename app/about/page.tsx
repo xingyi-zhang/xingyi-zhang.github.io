@@ -1,4 +1,5 @@
 import { AboutGallery } from "../components/AboutGallery";
+import { GooseFootprints } from "../components/GooseDetails";
 import { creativeItems, researchItems } from "../data";
 
 const selectedItems = [...researchItems, ...creativeItems].filter((item) => item.featured);
@@ -17,5 +18,6 @@ export default function About() {
     </section>
 
     <AboutGallery items={selectedItems} />
+    <GooseFootprints />
   </main>;
 }

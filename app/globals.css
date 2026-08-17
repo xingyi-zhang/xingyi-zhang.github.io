@@ -66,6 +66,27 @@ main { min-height:calc(100vh - 84px); padding:0 3.2vw 120px; }
 .multi-menu input { width:14px; height:14px; accent-color:var(--ink); }
 .multi-menu button { width:100%; margin-top:6px; padding:9px 6px; text-align:left; border:0; border-top:1px solid var(--line); background:none; color:var(--muted); cursor:pointer; }
 .multi-menu button:disabled { opacity:.4; cursor:default; }
+.collection-page { position:relative; overflow:hidden; }
+.peek-goose { position:fixed; z-index:18; left:-92px; top:42%; width:180px; pointer-events:none; animation:peek-visit 1.7s ease-in-out both; }
+.peek-goose.is-persistent { position:absolute; top:auto; left:-86px; bottom:0; animation:peek-arrive .55s ease-out both; }
+.peek-goose svg { display:block; width:100%; }
+.peek-body { fill:#faf8f2; }
+.peek-beak,.peek-feet { fill:#b85f3d; }
+.peek-eye { fill:#292825; }
+.peek-wing { fill:none; stroke:#d9d8d2; stroke-width:6; stroke-linecap:round; }
+.peek-legs { fill:none; stroke:#b85f3d; stroke-width:7; stroke-linecap:round; }
+.peek-feet { stroke:#b85f3d; stroke-width:4; stroke-linejoin:round; }
+.empty-collection { position:relative; min-height:360px; display:flex; align-items:center; justify-content:center; overflow:hidden; border-top:1px solid var(--line); }
+.empty-collection>p { font:300 clamp(24px,3vw,42px)/1.2 var(--serif); color:var(--muted); }
+.goose-footprints { display:flex; justify-content:flex-end; gap:13px; padding:90px 2vw 10px; color:#9b978d; transform:rotate(-12deg); opacity:.6; }
+.goose-footprints span { display:block; font:400 25px/1 var(--serif); transform:rotate(90deg); }
+.goose-footprints span:nth-child(even) { margin-top:13px; }
+.not-found-page { position:relative; min-height:calc(100vh - 84px); overflow:hidden; padding-top:13vh; }
+.not-found-page h1 { max-width:900px; margin:35px 0 45px; font:300 clamp(58px,8vw,120px)/.92 var(--serif); letter-spacing:-.04em; }
+.not-found-page>a { display:inline-block; padding-bottom:4px; border-bottom:1px solid currentColor; }
+.not-found-page .peek-goose { position:fixed; bottom:-15px; top:auto; }
+@keyframes peek-visit { 0%,100% { transform:translateX(-105%); } 24%,72% { transform:translateX(0); } }
+@keyframes peek-arrive { from { transform:translateX(-100%); } to { transform:translateX(0); } }
 .detail { padding-top:5vh; }
 .hero-button { width:100%; padding:0; border:0; background:none; cursor:zoom-in; }
 .artwork.large { min-height:0; max-height:none; padding:clamp(12px,2vw,30px); }

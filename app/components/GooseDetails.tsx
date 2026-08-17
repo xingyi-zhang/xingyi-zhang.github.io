@@ -1,0 +1,18 @@
+export function PeekGoose({ persistent = false }: { persistent?: boolean }) {
+  return <div className={`peek-goose${persistent ? " is-persistent" : ""}`} aria-hidden="true">
+    <svg viewBox="0 0 256 256">
+      <path className="peek-beak" d="M203 52c11 2 21 5 30 10 5 3 5 9 0 12-10 3-21 4-32 2l2-24Z"/>
+      <path className="peek-body" d="M40 166c23-5 36-20 58-29 14-6 27-6 39-4 11 1 17-5 17-16 0-12-6-25-5-39 1-22 9-37 23-42 14-5 27 3 32 18l-3 22c-12 6-18 13-19 24-1 12 6 27 13 41 8 17 9 33 0 49-12 21-36 32-67 32-33 0-63-12-80-32-5-6-9-12-12-18-2-3 0-5 4-6Z"/>
+      <circle className="peek-eye" cx="186" cy="51" r="3"/>
+      <path className="peek-wing" d="M76 176c22 2 42-8 57-23"/>
+      <path className="peek-legs" d="M113 208v19m41-18v18"/>
+      <path className="peek-feet" d="m113 225-15 10h24Zm41 0-12 10h25Z"/>
+    </svg>
+  </div>;
+}
+
+export function GooseFootprints() {
+  return <div className="goose-footprints" aria-hidden="true">
+    <span>⋔</span><span>⋔</span><span>⋔</span><span>⋔</span>
+  </div>;
+}

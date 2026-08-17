@@ -2,6 +2,7 @@
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { CatalogItem } from "../data";
+import { GooseFootprints, PeekGoose } from "./GooseDetails";
 
 function Artwork({ item, large = false }: { item: CatalogItem; large?: boolean }) {
   return <div className={`artwork has-image ${large ? "large" : ""}`}><img src={item.image} alt={item.title} /></div>;
@@ -50,14 +51,18 @@ type CollectionProps = {
   secondaryFilterLabel: string;
   primaryField: "topics" | "practice";
   secondaryField: "outputs" | "materials";
+  footprints?: boolean;
 };
 
-export function Collection({ title, subtitle, eyebrow, items, filters, initialFilter, filterLabel, secondaryOptions, secondaryFilterLabel, primaryField, secondaryField }: CollectionProps) {
+export function Collection({ title, subtitle, eyebrow, items, filters, initialFilter, filterLabel, secondaryOptions, secondaryFilterLabel, primaryField, secondaryField, footprints = false }: CollectionProps) {
   const [active, setActive] = useState(initialFilter);
   const [secondary, setSecondary] = useState<string[]>([]);
+  const [peeking, setPeeking] = useState(true);
   useEffect(() => {
     const requested = new URLSearchParams(window.location.search).get("filter");
     if (requested && filters.includes(requested)) setActive(requested);
+    const timer = window.setTimeout(() => setPeeking(false), 1700);
+    return () => window.clearTimeout(timer);
   }, [filters]);
   const toggleSecondary = (option: string) => setSecondary((current) => current.includes(option) ? current.filter((item) => item !== option) : [...current, option]);
   const valuesFor = (item: CatalogItem, field: CollectionProps["primaryField"] | CollectionProps["secondaryField"]): string[] => {
@@ -69,7 +74,7 @@ export function Collection({ title, subtitle, eyebrow, items, filters, initialFi
   const visible = items.filter((item) => valuesFor(item, primaryField).includes(active) && (secondary.length === 0 || secondary.some((option) => valuesFor(item, secondaryField).includes(option))));
   const secondaryLabel = secondary.length === 0 ? `All ${secondaryFilterLabel}` : secondary.length === 1 ? secondary[0] : `${secondary.length} ${secondaryFilterLabel}`;
 
-  return <main><div className="page-heading collection-heading">{eyebrow && <p className="eyebrow">{eyebrow}</p>}<h1>{title}</h1>{subtitle && <p>{subtitle}</p>}</div><div className="catalog-controls"><div className="filter-scroll"><span className="filter-label">{filterLabel}</span><div className="filters" role="group" aria-label={`Filter ${title}`}>{filters.map((filter) => <button aria-pressed={active === filter} onClick={() => setActive(filter)} key={filter}>{filter}</button>)}</div></div><details className="multi-select"><summary>{secondaryLabel}<span aria-hidden>⌄</span></summary><div className="multi-menu" role="group" aria-label={`Filter by ${secondaryFilterLabel.toLowerCase()}`}>{secondaryOptions.map((option) => <label key={option}><input type="checkbox" checked={secondary.includes(option)} onChange={() => toggleSecondary(option)} /><span>{option}</span></label>)}<button type="button" onClick={() => setSecondary([])} disabled={secondary.length === 0}>Clear selections</button></div></details></div><CatalogGrid items={visible} /></main>;
+  return <main className="collection-page"><div className="page-heading collection-heading">{eyebrow && <p className="eyebrow">{eyebrow}</p>}<h1>{title}</h1>{subtitle && <p>{subtitle}</p>}</div><div className="catalog-controls"><div className="filter-scroll"><span className="filter-label">{filterLabel}</span><div className="filters" role="group" aria-label={`Filter ${title}`}>{filters.map((filter) => <button aria-pressed={active === filter} onClick={() => setActive(filter)} key={filter}>{filter}</button>)}</div></div><details className="multi-select"><summary>{secondaryLabel}<span aria-hidden>⌄</span></summary><div className="multi-menu" role="group" aria-label={`Filter by ${secondaryFilterLabel.toLowerCase()}`}>{secondaryOptions.map((option) => <label key={option}><input type="checkbox" checked={secondary.includes(option)} onChange={() => toggleSecondary(option)} /><span>{option}</span></label>)}<button type="button" onClick={() => setSecondary([])} disabled={secondary.length === 0}>Clear selections</button></div></details></div>{visible.length ? <CatalogGrid items={visible} /> : <div className="empty-collection"><p>Nothing in this corner of the collection yet.</p><PeekGoose persistent /></div>}{peeking && visible.length > 0 && <PeekGoose />}{footprints && <GooseFootprints />}</main>;
 }
 
 export { Artwork };
