@@ -4,21 +4,21 @@ import type { CSSProperties } from "react";
 import { useEffect, useRef, useState } from "react";
 
 const exhibits = [
-  { name: "Graph blackboard", href: "/research?filter=Graphs%20%26%20Groups", x: 16, y: 56, image: "/images/home/research-graph.png", className: "exhibit-graph" },
-  { name: "Perception models", href: "/research?filter=Perception", x: 24, y: 58, image: "/images/home/research-perception.png", className: "exhibit-perception" },
-  { name: "Open science archive", href: "/research?filter=Open%20Science", x: 17, y: 71, image: "/images/home/research-open-book.png", className: "exhibit-open-science" },
-  { name: "Ceramics table", href: "/creative?filter=Ceramics", x: 48, y: 16, image: "/images/home/creative-ceramics.png", className: "exhibit-ceramics" },
-  { name: "Yarn basket", href: "/creative?filter=Crochet", x: 55, y: 17, image: "/images/home/creative-yarn.png", className: "exhibit-yarn" },
-  { name: "Bookshelf", href: "/resources?filter=Trauma", x: 74, y: 56, image: "/images/home/resources-bookshelf.png", className: "exhibit-bookshelf" },
-  { name: "Care kit", href: "/resources?filter=Health%20Care", x: 82, y: 57, image: "/images/home/resources-care-kit.png", className: "exhibit-care" },
-  { name: "Listening station", href: "/resources", x: 82, y: 71, image: "/images/home/resources-listening.png", className: "exhibit-listening" },
+  { name: "Graph blackboard", href: "/research?filter=Graphs%20%26%20Groups&from=blackboard", x: 16, y: 56, image: "/images/home/research-graph.png", className: "exhibit-graph" },
+  { name: "Perception models", href: "/research?filter=Perception&from=perception-models", x: 24, y: 58, image: "/images/home/research-perception.png", className: "exhibit-perception" },
+  { name: "Open science archive", href: "/research?filter=Open%20Science&from=open-book", x: 17, y: 71, image: "/images/home/research-open-book.png", className: "exhibit-open-science" },
+  { name: "Ceramics table", href: "/creative?filter=Ceramics&from=ceramics-table", x: 48, y: 16, image: "/images/home/creative-ceramics.png", className: "exhibit-ceramics" },
+  { name: "Yarn basket", href: "/creative?filter=Crochet&from=yarn-basket", x: 55, y: 17, image: "/images/home/creative-yarn.png", className: "exhibit-yarn" },
+  { name: "Bookshelf", href: "/resources?filter=Trauma&from=bookshelf", x: 74, y: 56, image: "/images/home/resources-bookshelf.png", className: "exhibit-bookshelf" },
+  { name: "Care kit", href: "/resources?filter=Health%20Care&from=care-kit", x: 82, y: 57, image: "/images/home/resources-care-kit.png", className: "exhibit-care" },
+  { name: "Listening station", href: "/resources?from=listening-station", x: 82, y: 71, image: "/images/home/resources-listening.png", className: "exhibit-listening" },
 ];
 
 const entrances = [
-  { name: "Research entrance", href: "/research", x: 33, y: 74 },
-  { name: "Creative entrance", href: "/creative", x: 50, y: 29 },
-  { name: "Resources entrance", href: "/resources", x: 67, y: 74 },
-  { name: "The pond", href: "/about", x: 50, y: 55 },
+  { name: "Research entrance", href: "/research?from=research-entrance", x: 33, y: 74 },
+  { name: "Creative entrance", href: "/creative?from=creative-entrance", x: 50, y: 29 },
+  { name: "Resources entrance", href: "/resources?from=resources-entrance", x: 67, y: 74 },
+  { name: "The pond", href: "/about?from=pond", x: 50, y: 55 },
 ];
 
 const observationPoints = [...exhibits, ...entrances];
@@ -37,6 +37,7 @@ export function HomeMuseum() {
   const [walking, setWalking] = useState(false);
   const [observing, setObserving] = useState(false);
   const [honking, setHonking] = useState(false);
+  const [departing, setDeparting] = useState<string | null>(null);
   const [travelTime, setTravelTime] = useState("2.4s");
   const nearby = nearbyPoint(position.x, position.y);
 
@@ -61,7 +62,12 @@ export function HomeMuseum() {
     if (navigationTimer.current) clearTimeout(navigationTimer.current);
     const destination = nearbyPoint(position.x, position.y);
     observeTimer.current = setTimeout(() => setObserving(false), destination ? 1400 : 1250);
-    if (destination) navigationTimer.current = setTimeout(() => { window.location.href = destination.href; }, 1100);
+    if (destination) {
+      const wing = destination.href.startsWith("/research") ? "research" : destination.href.startsWith("/creative") ? "creative" : destination.href.startsWith("/resources") ? "resources" : "about";
+      sessionStorage.setItem("collection-garden-position", JSON.stringify({ x: destination.x, y: destination.y }));
+      setDeparting(wing);
+      navigationTimer.current = setTimeout(() => { window.location.href = destination.href; }, 1050);
+    }
   };
 
   const honk = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -74,6 +80,24 @@ export function HomeMuseum() {
     requestAnimationFrame(() => setHonking(true));
     honkTimer.current = setTimeout(() => setHonking(false), 850);
   };
+
+  useEffect(() => {
+    const saved = sessionStorage.getItem("collection-garden-position");
+    if (!saved) return;
+    try {
+      const restored = JSON.parse(saved) as { x?: number; y?: number };
+      if (typeof restored.x === "number" && typeof restored.y === "number") {
+        setTravelTime("0s");
+        setPosition({ x: restored.x, y: restored.y });
+      }
+    } catch { /* Ignore stale session data. */ }
+  }, []);
+
+  useEffect(() => {
+    const revealGarden = () => setDeparting(null);
+    window.addEventListener("pageshow", revealGarden);
+    return () => window.removeEventListener("pageshow", revealGarden);
+  }, []);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -165,13 +189,14 @@ export function HomeMuseum() {
       </div>
 
       <div className="map-controls">
-        <span>Click to walk · arrows / WASD</span>
-        <button type="button" onClick={observe}>Observe <kbd>Space</kbd></button>
+        <div className="control-row walk-guide"><span className="command-label">Walk</span><span className="click-control"><span>Click</span><i className="mouse-icon" aria-hidden="true" /></span><span className="key-divider">or</span><span className="key-cluster" aria-label="Arrow keys"><kbd className="key-up">↑</kbd><kbd className="key-left">←</kbd><kbd className="key-down">↓</kbd><kbd className="key-right">→</kbd></span><span className="key-divider">or</span><span className="key-cluster" aria-label="W A S D keys"><kbd className="key-up">W</kbd><kbd className="key-left">A</kbd><kbd className="key-down">S</kbd><kbd className="key-right">D</kbd></span></div>
+        <button className="control-row observe-guide" type="button" onClick={observe}><span className="command-label">Observe</span><kbd>Space</kbd></button>
       </div>
       <div className={`observation-status${nearby ? " is-active" : ""}`} aria-live="polite">
         <span>{observing ? "Observing" : nearby ? "Something nearby" : "Wandering"}</span>
         <strong>{nearby?.name ?? "The collection"}</strong>
       </div>
+      <div className={`garden-transition${departing ? " is-active" : ""}`} data-wing={departing ?? undefined} style={{ "--exit-x": `${position.x}%`, "--exit-y": `${position.y}%` } as CSSProperties} aria-hidden="true" />
     </div>
   </section>;
 }
