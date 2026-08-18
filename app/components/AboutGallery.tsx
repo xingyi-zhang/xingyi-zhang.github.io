@@ -14,7 +14,7 @@ export function AboutGallery({ items }: { items: CatalogItem[] }) {
 
   return <section className="about-gallery" aria-labelledby="selected-heading">
     <div className="about-gallery-heading">
-      <div><p className="eyebrow">Selected from the collection</p><h2 id="selected-heading">A few things I’ve kept.</h2></div>
+      <p className="eyebrow" id="selected-heading">Selected from the collection</p>
       <div className="gallery-controls" aria-label="Gallery controls">
         <button type="button" onClick={() => move(-1)} aria-label="Previous works">←</button>
         <button type="button" onClick={() => move(1)} aria-label="Next works">→</button>
