@@ -1,6 +1,31 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { GooseVariant, type GooseSection } from "./GooseVariant";
+
+export function SectionPeekGoose({ section }: { section: GooseSection }) {
+  return <div className={`section-peek-goose section-peek-${section}`} aria-hidden="true"><GooseVariant section={section} pose="peek" /></div>;
+}
+
+export function SleepyGoose({ section }: { section: GooseSection }) {
+  const [dream, setDream] = useState(0);
+  const dreamTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => () => {
+    if (dreamTimer.current) clearTimeout(dreamTimer.current);
+  }, []);
+
+  const showDream = () => {
+    setDream((current) => current + 1);
+    if (dreamTimer.current) clearTimeout(dreamTimer.current);
+    dreamTimer.current = setTimeout(() => setDream(0), 1200);
+  };
+
+  return <button type="button" className={`sleepy-goose sleepy-${section}`} onClick={showDream} aria-label="The tired goose is sleeping">
+    <GooseVariant section={section} pose="sleep" />
+    {dream > 0 && <span className="dream-zs" key={dream} aria-hidden="true"><i>z</i><i>Z</i><i>Z</i></span>}
+  </button>;
+}
 
 export function PeekGoose({ persistent = false }: { persistent?: boolean }) {
   const [honking, setHonking] = useState(false);

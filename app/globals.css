@@ -71,6 +71,9 @@ main { min-height:calc(100vh - 84px); padding:0 3.2vw 120px; }
 .wing-research { --wing-accent:#667f8c; }
 .wing-creative { --wing-accent:#b86c4d; }
 .wing-resources { --wing-accent:#72866b; }
+.section-peek-goose { position:fixed; z-index:18; left:-22px; top:38%; width:clamp(170px,15vw,220px); pointer-events:none; animation:section-peek-visit 2.3s ease-in-out both; }
+.section-peek-goose img { display:block; width:100%; height:auto; max-height:330px; object-fit:contain; object-position:left center; transform:scaleX(-1); }
+.section-peek-research { left:-62px; height:175px; overflow:hidden; }
 .peek-goose { position:fixed; z-index:18; left:-92px; top:42%; width:180px; cursor:pointer; animation:peek-visit 1.7s ease-in-out both; }
 .peek-goose.is-persistent { position:absolute; top:auto; left:-86px; bottom:0; animation:peek-arrive .55s ease-out both; }
 .peek-goose svg { display:block; width:100%; }
@@ -80,8 +83,17 @@ main { min-height:calc(100vh - 84px); padding:0 3.2vw 120px; }
 .peek-wing { fill:none; stroke:#d9d8d2; stroke-width:6; stroke-linecap:round; }
 .peek-legs { fill:none; stroke:#b85f3d; stroke-width:7; stroke-linecap:round; }
 .peek-feet { stroke:#b85f3d; stroke-width:4; stroke-linejoin:round; }
-.empty-collection { position:relative; min-height:360px; display:flex; align-items:center; justify-content:center; overflow:hidden; border-top:1px solid var(--line); }
-.empty-collection>p { font:300 clamp(24px,3vw,42px)/1.2 var(--serif); color:var(--muted); }
+.empty-collection { position:relative; min-height:520px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:26px; overflow:hidden; border-top:1px solid var(--line); }
+.empty-collection>p { margin:0; font:300 clamp(24px,3vw,42px)/1.2 var(--serif); color:var(--muted); }
+.sleepy-goose { position:relative; width:min(520px,78vw); min-height:190px; padding:0; border:0; background:none; cursor:pointer; animation:sleep-breathe 4.2s ease-in-out infinite; }
+.sleepy-goose:focus { outline:none; }
+.sleepy-goose img { display:block; width:100%; max-height:285px; object-fit:contain; margin:auto; }
+.sleepy-creative { width:min(500px,76vw); }
+.sleepy-resources { width:min(560px,80vw); }
+.dream-zs { position:absolute; top:4%; right:18%; width:115px; height:120px; pointer-events:none; }
+.dream-zs i { position:absolute; bottom:0; left:15%; color:var(--muted); font:italic 400 27px/1 var(--serif); opacity:0; animation:dream-z 1.15s ease-out forwards; }
+.dream-zs i:nth-child(2) { left:46%; font-size:36px; animation-delay:.12s; }
+.dream-zs i:nth-child(3) { left:75%; font-size:45px; animation-delay:.24s; }
 .goose-footprints { display:flex; justify-content:flex-end; gap:13px; padding:90px 2vw 10px; color:#9b978d; transform:rotate(-12deg); opacity:.6; }
 .goose-footprints span { display:block; font:400 25px/1 var(--serif); transform:rotate(90deg); }
 .goose-footprints span:nth-child(even) { margin-top:13px; }
@@ -91,6 +103,14 @@ main { min-height:calc(100vh - 84px); padding:0 3.2vw 120px; }
 .not-found-page .peek-goose { position:fixed; bottom:-15px; top:auto; }
 @keyframes peek-visit { 0%,100% { transform:translateX(-105%); } 24%,72% { transform:translateX(0); } }
 @keyframes peek-arrive { from { transform:translateX(-100%); } to { transform:translateX(0); } }
+@keyframes section-peek-visit { 0%,100% { transform:translateX(-110%); } 20%,76% { transform:translateX(0); } }
+@keyframes sleep-breathe { 0%,100% { transform:translateY(0) scale(1); } 50% { transform:translateY(-2px) scale(1.006); } }
+@keyframes dream-z { 0% { transform:translate(0,8px) scale(.7); opacity:0; } 22% { opacity:.75; } 100% { transform:translate(20px,-70px) scale(1.08); opacity:0; } }
+@media (prefers-reduced-motion:reduce) {
+  .section-peek-goose { animation-duration:.01ms; animation-iteration-count:1; }
+  .sleepy-goose { animation:none; }
+  .dream-zs i { animation-duration:.01ms; }
+}
 .detail { padding-top:5vh; }
 .hero-button { width:100%; padding:0; border:0; background:none; cursor:zoom-in; }
 .artwork.large { min-height:0; max-height:none; padding:clamp(12px,2vw,30px); }
